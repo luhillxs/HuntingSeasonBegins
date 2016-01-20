@@ -12,7 +12,7 @@ public:
             return 0;
         }
         else{
-            for(i=0;i<nums.size();i++){
+            for(i=0;i<nums.size();++i){
                 if(nums[i]!=nums[j-1]){
                     nums[j] = nums[i];
                     j+=1;
