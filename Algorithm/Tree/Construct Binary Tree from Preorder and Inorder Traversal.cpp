@@ -1,3 +1,7 @@
+/*
+    Given preorder and inorder traversal of a tree, construct the binary tree.
+*/
+
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
