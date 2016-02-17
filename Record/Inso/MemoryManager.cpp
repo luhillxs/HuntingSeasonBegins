@@ -278,7 +278,11 @@ namespace MemoryManager
         min_mem = mem;
         // std::cout<<"max_mem: "<<max_mem<<std::endl;
     }
-    if(hasDebris&&min_mem==MM_POOL_SIZE){ // the pool has debris
+    
+    // the pool has debris, while min_mem==MM_POOL_SIZE means that 
+    // all debris are not enough for the smallest allocating
+    // if ther are not any debris, min_mem==MM_POOL_SIZE means the whole pool is empty
+    if(hasDebris&&min_mem==MM_POOL_SIZE){ 
       min_mem = 0;
     }
 
