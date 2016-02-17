@@ -35,12 +35,18 @@ namespace MemoryManager
   {
     // TODO: IMPLEMENT ME
     std::cout<<"allocate:"<<aSize<<std::endl;
-    if(aSize+5+1>freeRemaining()){
+    if(aSize>freeRemaining()){
+      onOutOfMemory();
+    }
+    else if(aSize>largestFree()){
+      std::cerr<<"No suitable data block."<<std::endl;
       onOutOfMemory();
     }
 
     // mark started position
     int i=0,k=0;
+    // k: travel the whole pool
+    // i: jump over the occupied data block
     for(k=0;k<MM_POOL_SIZE;k++){
 
       for(i=k;i<MM_POOL_SIZE;i++){
@@ -58,12 +64,14 @@ namespace MemoryManager
         else{
           i += 5;
           i += temp;
+          // std::cout<<"temp: "<<temp<<" i:"<<i<<std::endl;
         }
       }
-      // std::cout<<"allocate started position: "<<i<<std::endl;
+      // std::cout<<"allocate possibly started position: "<<i<<std::endl;
 
 
-      if(i==MM_POOL_SIZE||i+aSize+5+1>MM_POOL_SIZE){
+      if(i==MM_POOL_SIZE||i+aSize>MM_POOL_SIZE){
+        std::cerr<<"No suitable data block."<<std::endl;
         onOutOfMemory();
       }
 
@@ -72,7 +80,6 @@ namespace MemoryManager
       for(test = aSize+5+1;test>=0;test--){
         if(MM_pool[i+test]!=0) break;
       }
-
       if(test<0){ // space is enough
           // int to char
           // store the size
@@ -93,8 +100,9 @@ namespace MemoryManager
               temp = temp/10;
               j--;
           }
-          // for(j=0;j<5;j++){
-          //   std::cout<<MM_pool[i+j];
+          // std::cout<<"allocate size: ";
+          // for(int count=0;count<5;count++){
+          //   std::cout<<MM_pool[i+count];
           // }
           // std::cout<<std::endl;
           // get the address of memory pool
@@ -102,8 +110,18 @@ namespace MemoryManager
           return ((void*) &MM_pool[i]);
           // std::cout<<"memory position: "<<i<<std::endl;   
         }
-      else{
-        i += test + 2;
+      else{ // space is not enough, then go find another emplty data block
+        // travel back to mark the size of the occupied data block
+        // int travel_back;
+        // for(travel_back = i+test;MM_pool[travel_back]!=0&&travel_back>=0;travel_back--){
+          
+        // }
+        // k = travel_back;
+        int travel = i;
+        while(MM_pool[travel+1]==0){
+          travel++;
+        }
+        k = travel;
       }
     }
   }
@@ -112,11 +130,11 @@ namespace MemoryManager
   void deallocate(void* aPointer)
   {
     // TODO: IMPLEMENT ME
-
+    
     // mark the started position
     int start = (char*)aPointer - MM_pool;
     start -= 5;
-    // std::cout<<"started position: "<<start<<std::endl;
+    std::cout<<"dellocate started position: "<<start<<std::endl;
 
     // char to int
     int temp = 0;
@@ -127,7 +145,7 @@ namespace MemoryManager
         temp = temp * 10 + (MM_pool[start+j] - '0'); 
     }
     int delta = 5+temp+1;
-    // std::cout<<"delta: "<<delta<<std::endl;
+    std::cout<<"dellocate total elements: "<<delta<<std::endl;
 
     int i;
     for(i=start;i<delta;i++){
@@ -149,9 +167,56 @@ namespace MemoryManager
     // mark started position
     for(i=0;i<MM_POOL_SIZE;i++){
       if(MM_pool[i]==0){
+        mem++;
+        // std::cout<<"i: "<<i<<std::endl;
         continue;
+        
+      }
+      // std::cout<<"mem ongoing:"<< mem <<std::endl;
+      
+      // char to int
+      int temp = 0;
+      for(int j = 0;j<5;j++){
+        if ((MM_pool[i+j] < '0') || (MM_pool[i+j] > '9')){
+               break;
+        }
+        temp = temp * 10 + (MM_pool[i+j] - '0'); 
+        
       }
 
+      i += 5;
+      i += temp;
+      // std::cout<<"origin i:"<< i-temp-5<<" jump: "<<temp<<" i:"<<i<<std::endl;
+      // std::cout<<"i: "<<i<<std::endl;
+      // std::cout<<"MM_pool[i+1]: "<<(int)MM_pool[i+1]<<std::endl;
+      // std::cout<<"mem: "<<mem<<std::endl;
+    }
+    // std::cout<<"mem ongoing:"<< mem <<std::endl;
+    // std::cout<<"started position: "<<i<<std::endl;
+    
+    return (mem-5-1>0? mem-5-1:0);
+  }
+
+  // Will scan the memory pool and return the largest free space remaining
+  int largestFree(void)
+  {
+    // TODO: IMPLEMENT ME
+    // std::cout<<"largestFree"<<std::endl;
+    int i=0;
+    int mem = 0;
+    int max_mem = 0;
+    // mark started position
+    for(i=0;i<MM_POOL_SIZE;i++){
+      if(MM_pool[i]==0){
+        mem++;
+        continue;
+      }
+      // std::cout<<"mem: "<<mem<<std::endl;
+      if(mem>max_mem){
+        max_mem = mem;
+        // std::cout<<"max_mem: "<<max_mem<<std::endl;
+      }
+      mem = 0;
       // char to int
       int temp = 0;
       for(int j = 0;j<5;j++){
@@ -160,32 +225,63 @@ namespace MemoryManager
         }
         temp = temp * 10 + (MM_pool[i+j] - '0'); 
       }
-
       i += 5;
       i += temp;
-
-      mem += 5+temp+1; 
-      // std::cout<<"mem: "<<mem<<std::endl;
+    }
+    
+    if(mem>max_mem){
+        max_mem = mem;
+        // std::cout<<"max_mem: "<<max_mem<<std::endl;
     }
 
-    // std::cout<<"started position: "<<i<<std::endl;
-
-    return (MM_POOL_SIZE-mem-5-1);
-  }
-
-  // Will scan the memory pool and return the largest free space remaining
-  int largestFree(void)
-  {
-    // TODO: IMPLEMENT ME
-
-    return 0;
+    return (max_mem-5-1>0? max_mem-5-1:0);
   }
 
   // will scan the memory pool and return the smallest free space remaining
   int smallestFree(void)
   {
     // TODO: IMPLEMENT ME
+    int i=0;
+    int mem = 0;
+    int min_mem = MM_POOL_SIZE;
+    bool reset = true;
+    bool hasDebris = false;
+    // mark started position
+    for(i=0;i<MM_POOL_SIZE;i++){
+      if(MM_pool[i]==0){
+        mem++;
+        reset = false;
+        continue;
+      }
+      
+      hasDebris = true;
+      // std::cout<<"mem: "<<mem<<std::endl;
+      if(mem<=min_mem&&!reset&&mem-5-1>0){
+        min_mem = mem;
+        // std::cout<<"max_mem: "<<max_mem<<std::endl;
+      }
+      mem = 0;
+      reset = true;
+      // char to int
+      int temp = 0;
+      for(int j = 0;j<5;j++){
+        if ((MM_pool[i+j] < '0') || (MM_pool[i+j] > '9')){
+               break;
+        }
+        temp = temp * 10 + (MM_pool[i+j] - '0'); 
+      }
+      i += 5;
+      i += temp;
+    }
+    
+    if(mem<min_mem&&!reset&&mem-5-1>0){
+        min_mem = mem;
+        // std::cout<<"max_mem: "<<max_mem<<std::endl;
+    }
+    if(hasDebris&&min_mem==MM_POOL_SIZE){ // the pool has debris
+      min_mem = 0;
+    }
 
-    return 0;
+    return (min_mem-5-1>0? min_mem-5-1:0);
   }
  }
