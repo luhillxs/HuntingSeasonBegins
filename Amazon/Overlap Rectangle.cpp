@@ -19,8 +19,8 @@ public class OverLap {
 	{
 	    if(bottomRightA.x < topLeftB.x 
 	       || topLeftA.x < bottomRightB.x 
-         || bottomRightA.y > topLeftB.y 
-         || topLeftA.y < bottomRightB.y)
+               || bottomRightA.y > topLeftB.y 
+               || topLeftA.y < bottomRightB.y)
          {
              return false;
          }         
