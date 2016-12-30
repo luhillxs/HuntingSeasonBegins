@@ -18,9 +18,9 @@ public class OverLap {
 	public static boolean check(Node topLeftA, Node topLeftB, Node bottomRightA, Node bottomRightB) 
 	{
 	    if(bottomRightA.x < topLeftB.x 
-	       || topLeftA.x < bottomRightB.x 
-               || bottomRightA.y > topLeftB.y 
-               || topLeftA.y < bottomRightB.y)
+        || topLeftA.x < bottomRightB.x 
+        || bottomRightA.y > topLeftB.y 
+        || topLeftA.y < bottomRightB.y)
          {
              return false;
          }         
