@@ -31,6 +31,9 @@ int main() {
     v.push_front(666);
     for(int i=0; i < 10; i++)
       v.push_back(i);
+    // 以下是之后补充的，两步没有运行过
+    v.insert(v.begin() , 99); // 不能+和-了  
+    v.insert(v.end() , 99);
     
     cout << "=========Iterate=========" <<endl;
     for_each(v.begin(), v.end(), print);
