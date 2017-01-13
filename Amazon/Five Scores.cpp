@@ -17,7 +17,7 @@ class Result{
 };
 
 map<int, double> High_Five(vector<Result> results){
-    map<int, priority_queue<int, vector<int>, greater<int> > > topFive;
+    map<int, priority_queue<int, vector<int>, greater<int> > > topFive; // 小顶堆存最大5个分数
     map<int, double> res;
     map<int, priority_queue<int, vector<int>, greater<int> > >::iterator iterMap;
     map<int, double>::iterator iterRes;
