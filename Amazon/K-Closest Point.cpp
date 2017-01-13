@@ -20,18 +20,29 @@ double getDistance(Point a, Point b) {
 }
 
 //typedef bool (*comp)(Point, Point); // 函数指针 
-Point global_origin = Point(0,0);
 bool compare(Point a, Point b)
 {
   // new point is 'a', if a distance < b distance, return TRUE, keep iterating
   // until FALSE
   // top element is the GREATEST
-   return getDistance(a, global_origin) < getDistance(b, global_origin);
+  Point global_origin = Point(0,0);
+  return getDistance(a, global_origin) < getDistance(b, global_origin);
 }
+
+class Compare
+{
+public:
+    bool operator() (Point a, Point b)
+    {
+        Point global_origin = Point(0,0);
+        return getDistance(a, global_origin) < getDistance(b, global_origin);
+    }
+};
 
 vector<Point> Solution(vector<Point> &array, Point origin, int k) {
     global_origin = Point(origin.x, origin.y);
     priority_queue<Point, std::vector<Point>, bool (*)(Point, Point)> pq(compare);
+    // priority_queue<Point, std::vector<Point>, Compare> pq;
     vector<Point> ret;
     for (int i = 0; i < array.size(); i++) {
         pq.push(array[i]);
