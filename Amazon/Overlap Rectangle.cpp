@@ -17,6 +17,7 @@ public class OverLap {
 
 	public static boolean check(Node topLeftA, Node topLeftB, Node bottomRightA, Node bottomRightB) 
 	{
+      // 逆向思维法
 	    if(bottomRightA.x < topLeftB.x 
         || topLeftA.x < bottomRightB.x 
         || bottomRightA.y > topLeftB.y 

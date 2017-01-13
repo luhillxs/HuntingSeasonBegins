@@ -17,7 +17,7 @@ class Result{
 };
 
 map<int, double> High_Five(vector<Result> results){
-    map<int, priority_queue<int, vector<int>, greater<int> > > topFive; // 小顶堆存最大5个分数，注意最后3个>之间又空格
+    map<int, priority_queue<int, vector<int>, greater<int> > > topFive; // 小顶堆存最大5个分数，注意最后3个>之间有空格
     map<int, double> res;
     map<int, priority_queue<int, vector<int>, greater<int> > >::iterator iterMap;
 
@@ -51,6 +51,8 @@ map<int, double> High_Five(vector<Result> results){
     return res;
 }
 
+
+// ==================Test Case==================
 int main() {    
     // Result *r1 = new Result(1, -1);
     Result *r1 = new Result(1, 95);

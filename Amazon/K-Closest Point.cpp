@@ -19,7 +19,6 @@ double getDistance(Point a, Point b) {
     return sqrt(pow((a.x - b.x), 2) + pow((a.y - b.y), 2));
 }
 
-//typedef bool (*comp)(Point, Point); // 函数指针 
 bool compare(Point a, Point b)
 {
   // new point is 'a', if a distance < b distance, return TRUE, keep iterating
@@ -42,7 +41,7 @@ public:
 vector<Point> Solution(vector<Point> &array, Point origin, int k) {
     global_origin = Point(origin.x, origin.y);
     priority_queue<Point, std::vector<Point>, bool (*)(Point, Point)> pq(compare);
-    // priority_queue<Point, std::vector<Point>, Compare> pq;
+    // priority_queue<Point, std::vector<Point>, Compare> pq; // 两种写法都可以
     vector<Point> ret;
     for (int i = 0; i < array.size(); i++) {
         pq.push(array[i]);
@@ -58,7 +57,7 @@ vector<Point> Solution(vector<Point> &array, Point origin, int k) {
 }
 
 
-
+// ==================Test Case==================
 int main()
 {
    Point p1 = Point(4.5, 6.0);
